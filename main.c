@@ -91,6 +91,13 @@ void clear_window()
     }
 }
 
+int kill_prog()
+{
+    mlx_destroy_window(g_val.mlx_ptr, g_val.mlx_win_ptr);
+    exit(0);
+    return (0);
+}
+
 int key_press_hook(int keycode)
 {
    switch (keycode)
@@ -111,26 +118,32 @@ int key_press_hook(int keycode)
             if (g_val.map[g_val.p_pos.y][g_val.p_pos.x + 1] != '1')
                 ++g_val.p_pos.x;
             break;
+        case 53:
+            kill_prog();
         default:
             break;
    }
    clear_window();
    drawFrame();
+   return (0);
 }
 
-int main()
+int main(int argc, char **argv)
 {
-    g_val.mlx_ptr = mlx_init();
+    if(argc == 2)
+    {
+        g_val.mlx_ptr = mlx_init();
 
-    globs_init();
+        globs_init();
 
-    parse_map("./maps/map.ber");
-    calc_res();
-    g_val.mlx_win_ptr = mlx_new_window(g_val.mlx_ptr, g_val.screen_w, g_val.screen_h, "So Long");
-    drawFrame();
-    mlx_hook(g_val.mlx_win_ptr, 2, 1L << 0, key_press_hook, &g_val);
-    mlx_loop(g_val.mlx_ptr);
-
+        parse_map(argv[1]);
+        calc_res();
+        g_val.mlx_win_ptr = mlx_new_window(g_val.mlx_ptr, g_val.screen_w, g_val.screen_h, "So Long");
+        drawFrame();
+        mlx_hook(g_val.mlx_win_ptr, 2, 1L << 0, key_press_hook, &g_val);
+        mlx_hook(g_val.mlx_win_ptr, 17, 1L << 0, kill_prog, &g_val);
+        mlx_loop(g_val.mlx_ptr);
+    }
     // sould replace user start position
     return 0;
 }

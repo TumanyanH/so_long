@@ -28,9 +28,10 @@ static void sizes_calc(char *map_url)
     fd = open(map_url, O_RDONLY);
     while (get_next_line(fd, &line) > 0)
     {
+        check_row(line);
         if (i++ == 0)
-            g_val.map_w = ft_strlen(line);
-        if (g_val.map_w != ft_strlen(line))
+            g_val.map_w = (int)ft_strlen(line);
+        if (g_val.map_w != (int)ft_strlen(line))
             ft_error("MAP - Wrong map");
         g_val.map_h++;
     }
@@ -94,23 +95,15 @@ static int check_map()
             ft_error("MAP - Invalid wall construction");
         y++;
     }
+    return (0);
 }
 
 int parse_map(char *map_url)
 {
-    int fd = 0;
-    char *line;
-    int i = 0;
-
     if (!is_map_url(map_url))
         ft_error("MAP - Url is invalid");
     sizes_calc(map_url);
     fill_matrix(map_url);
     check_map();
-    // printf("%d\n", g_val.map_h);
-    // while (i < g_val.map_h)
-    // {
-    //     printf("%s\n", g_val.map[i]);
-    //     i++;
-    // }
+    return (0);
 }
