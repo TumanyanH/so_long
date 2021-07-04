@@ -1,9 +1,6 @@
 {
-    "files.associations": {
-        "mlx.h": "c",
-        "string": "c",
-        "iosfwd": "c",
-        "so_long.h": "c"
-    },
-    "C_Cpp.errorSquiggles": "Disabled"
+	"files.associations": {
+		"so_long.h": "c",
+		"mlx.h": "c"
+	}
 }

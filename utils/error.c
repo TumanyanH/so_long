@@ -2,6 +2,6 @@
 
 void ft_error(char *string)
 {
-    ft_putchar(string);
-    exit(1);
+	ft_putchar(string);
+	exit(1);
 }

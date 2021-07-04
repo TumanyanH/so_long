@@ -3,4 +3,6 @@ all :
 																					./utils/parser.c \
 																					./utils/error.c \
 																					./utils/gnl/get_next_line.c \
-																					./utils/utils.c
+																					./utils/utils.c \
+																					./utils/sprites.c \
+																					./utils/get_pixel.c \

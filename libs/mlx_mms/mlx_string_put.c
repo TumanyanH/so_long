@@ -15,9 +15,9 @@ void mlx_int_fill(unsigned char *data, int sl)
   int i, j;
   j = 0;
   while (j < font_atlas.height)
-    {
-      i = 0;
-      while (i < font_atlas.width)
+	{
+	  i = 0;
+	  while (i < font_atlas.width)
 	{
 	  data[j*sl+i*4] = font_atlas.pixel_data[j*font_atlas.width*font_atlas.bytes_per_pixel+i*4+2];
 	  data[j*sl+i*4+1] = font_atlas.pixel_data[j*font_atlas.width*font_atlas.bytes_per_pixel+i*4+1];
@@ -25,9 +25,9 @@ void mlx_int_fill(unsigned char *data, int sl)
 	  data[j*sl+i*4+3] = 0xFF - font_atlas.pixel_data[j*font_atlas.width*font_atlas.bytes_per_pixel+i*4+3];
 	  i ++;
 	}
-      j ++;
-    }
-    
+	  j ++;
+	}
+	
 }
 
 int mlx_string_put(void *mlx_ptr, void *win_ptr, int x, int y, int color, char *string)
@@ -43,11 +43,11 @@ int mlx_string_put(void *mlx_ptr, void *win_ptr, int x, int y, int color, char *
   int dest_h;
 
   if (font == (void *)0)
-    {
-      font = mlx_new_image(mlx_ptr, font_atlas.width, font_atlas.height);
-      data = (unsigned char *)mlx_get_data_addr(font, &bpp, &size_line, &endian);
-      mlx_int_fill(data, size_line);
-    }
+	{
+	  font = mlx_new_image(mlx_ptr, font_atlas.width, font_atlas.height);
+	  data = (unsigned char *)mlx_get_data_addr(font, &bpp, &size_line, &endian);
+	  mlx_int_fill(data, size_line);
+	}
 
   color = (color&0xFFFFFF)|0xFF000000;
 
@@ -59,14 +59,14 @@ int mlx_string_put(void *mlx_ptr, void *win_ptr, int x, int y, int color, char *
 
   pos = 0;
   while (*string)
-    {
-      if (*string >= 32 && *string <= 127)
+	{
+	  if (*string >= 32 && *string <= 127)
 	val = *string - 32;
-      else
+	  else
 	val = 31;
-      mlx_put_image_to_window_scale(mlx_ptr, win_ptr, font, val*(FONT_WIDTH+2), 0, FONT_WIDTH, font_atlas.height, x+pos*dest_w, y, dest_w, dest_h, color);
-      pos ++;
-      string ++;
-    }
+	  mlx_put_image_to_window_scale(mlx_ptr, win_ptr, font, val*(FONT_WIDTH+2), 0, FONT_WIDTH, font_atlas.height, x+pos*dest_w, y, dest_w, dest_h, color);
+	  pos ++;
+	  string ++;
+	}
   return (0);
 }

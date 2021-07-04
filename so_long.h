@@ -14,14 +14,6 @@
                             || c == '0' \
                             || c == '1')
 
-int         parse_map(char *map_url);
-void        ft_error(char *string);
-void        ft_putchar(char *string);
-int	        get_next_line(const int fd, char **line);
-void        globs_init();
-int         key_press_hook(int keycode);
-char        *ft_strreplace(char *string, char c, char repl);
-
 // void	    put_pixel(t_data *data, int x, int y, int color);
 
 typedef struct s_coords
@@ -31,18 +23,54 @@ typedef struct s_coords
 } t_coords;
 
 
+typedef	struct		s_data
+{
+	void			*img;
+	char			*addr;
+	int				bits_per_pixel;
+	int				line_length;
+	int				endian;
+}					t_data;
+
+typedef struct      s_asset_paths
+{
+    char            *player;
+	void            *p_img;
+    t_data          p_data;
+    char            *exit;
+    void            *e_img;
+    t_data          e_data;
+    char            *collectable;
+    void            *c_img;
+    t_data          c_data;
+}                   t_asset_paths;
+
 struct s_values
 {
     void *mlx_ptr;
     void *mlx_win_ptr;
+    t_data image;
     int map_w;
     int map_h;
     char **map;
     int def_rect_size;
+    int allowed_def_rect_size;
     int screen_w;
     int screen_h;
     t_coords p_pos;
+    t_asset_paths assets;
 } g_val;
 
+int             parse_map(char *map_url);
+void            ft_error(char *string);
+void            ft_putchar(char *string);
+int	            get_next_line(const int fd, char **line);
+void            globs_init();
+int             key_press_hook(int keycode);
+char            *ft_strreplace(char *string, char c, char repl);
+unsigned int	get_pixel(t_data *data, int x, int y);
+void	        put_pixel(t_data *data, int x, int y, int color);
+
+void            get_sprites();
 
 #endif

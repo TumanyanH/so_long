@@ -12,8 +12,8 @@
 
 typedef struct  s_xpm_col
 {
-  int           name;
-  int           col;
+  int		   name;
+  int		   col;
 } t_xpm_col;
 
 
@@ -29,8 +29,8 @@ struct  s_col_name
 
 #define	RETURN	{ if (colors) free(colors); if (tab) free(tab); \
 		  if (colors_direct) free(colors_direct); \
-                  if (img) mlx_destroy_image(xvar, img);   \
-                  return ((void *)0); }
+				  if (img) mlx_destroy_image(xvar, img);   \
+				  return ((void *)0); }
 
 
 
@@ -47,18 +47,18 @@ int	mlx_int_str_str(char *str,char *find,int len)
 
   len_f = strlen(find);
   if (len_f>len)
-    return (-1);
+	return (-1);
   pos = 0;
   while (*(str+len_f-1))
-    {
-      s = str;
-      f = find;
-      while (*(f++) == *(s++))
-        if (!*f)
-          return (pos);
-      str ++;
-      pos ++;
-    }
+	{
+	  s = str;
+	  f = find;
+	  while (*(f++) == *(s++))
+		if (!*f)
+		  return (pos);
+	  str ++;
+	  pos ++;
+	}
   return (-1);
 }
 
@@ -74,24 +74,24 @@ int	mlx_int_str_str_cote(char *str,char *find,int len)
 
   len_f = strlen(find);
   if (len_f>len)
-    return (-1);
+	return (-1);
   cote = 0;
   pos = 0;
   while (*(str+len_f-1))
-    {
-      if (*str=='"')
+	{
+	  if (*str=='"')
 	cote = 1-cote;
-      if (!cote)
+	  if (!cote)
 	{
 	  s = str;
 	  f = find;
 	  while (*(f++) == *(s++))
-	    if (!*f)
-	      return (pos);
+		if (!*f)
+		  return (pos);
 	}
-      str ++;
-      pos ++;
-    }
+	  str ++;
+	  pos ++;
+	}
   return (-1);
 }
 
@@ -108,32 +108,32 @@ char	**mlx_int_str_to_wordtab(char *str)
   pos = 0;
   while (pos<len)
   {
-    while (*(str+pos)==' ' || *(str+pos)=='\t')
-      pos ++;
-    if (*(str+pos))
-      nb_word ++;
-    while (*(str+pos) && *(str+pos)!=' ' && *(str+pos)!='\t')
-      pos ++;
+	while (*(str+pos)==' ' || *(str+pos)=='\t')
+	  pos ++;
+	if (*(str+pos))
+	  nb_word ++;
+	while (*(str+pos) && *(str+pos)!=' ' && *(str+pos)!='\t')
+	  pos ++;
   }
   if (!(tab = malloc((1+nb_word)*sizeof(*tab))))
-    return ((char **)0);
+	return ((char **)0);
   nb_word = 0;
   pos = 0;
   while (pos<len)
-    {
-      while (*(str+pos)==' ' || *(str+pos)=='\t')
+	{
+	  while (*(str+pos)==' ' || *(str+pos)=='\t')
 	{
 	  *(str+pos) = 0;
 	  pos ++;
 	}
-      if (*(str+pos))
+	  if (*(str+pos))
 	{
 	  tab[nb_word] = str+pos;
 	  nb_word ++;
 	}
-      while (*(str+pos) && *(str+pos)!=' ' && *(str+pos)!='\t')
+	  while (*(str+pos) && *(str+pos)!=' ' && *(str+pos)!='\t')
 	pos ++;
-    }
+	}
   tab[nb_word] = 0;
   return (tab);
 }
@@ -150,9 +150,9 @@ char	*mlx_int_get_line(char *ptr,int *pos,int size)
   int	pos4;
 
   if ((pos2 = mlx_int_str_str(ptr+*pos,"\"",size-*pos))==-1)
-    return ((char *)0);
+	return ((char *)0);
   if ((pos3 = mlx_int_str_str(ptr+*pos+pos2+1,"\"",size-*pos-pos2-1))==-1)
-    return ((char *)0);
+	return ((char *)0);
   *(ptr+*pos+pos2) = 0;
   *(ptr+*pos+pos2+1+pos3) = 0;
   pos4 = *pos+pos2+1;
@@ -171,13 +171,13 @@ char	*mlx_int_static_line(char **xpm_data,int *pos,int size)
 
   str = xpm_data[(*pos)++];
   if ((len2 = strlen(str))>len)
-    {
-      if (copy)
+	{
+	  if (copy)
 	free(copy);
-      if (!(copy = malloc(len2+1)))
+	  if (!(copy = malloc(len2+1)))
 	return ((char *)0);
-      len = len2;
-    }
+	  len = len2;
+	}
   /* strcpy(copy,str); */
   strlcpy(copy, str, len2+1);
   return (copy);
@@ -190,7 +190,7 @@ int	mlx_int_get_col_name(char *str,int size)
 
   result = 0;
   while (size--)
-    result = (result<<8)+*(str++);
+	result = (result<<8)+*(str++);
   return (result);
 }
 
@@ -200,19 +200,19 @@ int	mlx_int_get_text_rgb(char *name, char *end)
   char	buff[64];
 
   if (*name == '#')
-    return (strtol(name+1,0,16));
+	return (strtol(name+1,0,16));
   if (end)
-    {
-      snprintf(buff, 64, "%s %s", name, end);
-      name = buff;
-    }
+	{
+	  snprintf(buff, 64, "%s %s", name, end);
+	  name = buff;
+	}
   i = 0;
   while (mlx_col_name[i].name)
-    {
-      if (!strcasecmp(mlx_col_name[i].name, name))
+	{
+	  if (!strcasecmp(mlx_col_name[i].name, name))
 	return (mlx_col_name[i].color);
-      i ++;
-    }
+	  i ++;
+	}
   return (0);
 }
 
@@ -252,88 +252,88 @@ void	*mlx_int_parse_xpm(void *xvar,void *info,int info_size,char *(*f)(), int *w
   tab = 0;
   pos = 0;
   if (!(line = f(info,&pos,info_size)) ||
-      !(tab = mlx_int_str_to_wordtab(line)) || !(*width = atoi(tab[0])) ||
-      !(*height = atoi(tab[1])) || !(nc = atoi(tab[2])) ||
-      !(cpp = atoi(tab[3])) )
-    RETURN;
+	  !(tab = mlx_int_str_to_wordtab(line)) || !(*width = atoi(tab[0])) ||
+	  !(*height = atoi(tab[1])) || !(nc = atoi(tab[2])) ||
+	  !(cpp = atoi(tab[3])) )
+	RETURN;
   free(tab);
   tab = 0;
 
   method = 0;
   if (cpp<=2)
-    {
-      method = 1;
-      if (!(colors_direct = malloc((cpp==2?65536:256)*sizeof(int))))
+	{
+	  method = 1;
+	  if (!(colors_direct = malloc((cpp==2?65536:256)*sizeof(int))))
 	RETURN;
-    }
+	}
   else
-    if (!(colors = malloc(nc*sizeof(*colors))))
-      RETURN;
+	if (!(colors = malloc(nc*sizeof(*colors))))
+	  RETURN;
 
   clip_data = 0;
 
   i = nc;
   while (i--)
-    {
-      if (!(line = f(info,&pos,info_size)) ||
+	{
+	  if (!(line = f(info,&pos,info_size)) ||
 	  !(tab = mlx_int_str_to_wordtab(line+cpp)) )
 	RETURN;
-      j = 0;
-      while (tab[j] && strcmp(tab[j++],"c"));
+	  j = 0;
+	  while (tab[j] && strcmp(tab[j++],"c"));
 
-      if (!tab[j])
+	  if (!tab[j])
 	RETURN;
 
-      rgb_col = mlx_int_get_text_rgb(tab[j], tab[j+1]);
-      if (method)
+	  rgb_col = mlx_int_get_text_rgb(tab[j], tab[j+1]);
+	  if (method)
 	colors_direct[mlx_int_get_col_name(line,cpp)] = rgb_col;
-      else
+	  else
 	{
 	  colors[i].name = mlx_int_get_col_name(line,cpp);
 	  colors[i].col = rgb_col;
 	}
-      free(tab);
-      tab = 0;
-    }
+	  free(tab);
+	  tab = 0;
+	}
 
   if (!(img = mlx_new_image(xvar,*width,*height)))
-    RETURN;
+	RETURN;
   data = mlx_get_data_addr(img, &opp, &sl, &endian);
   opp = 4;
 
   i = *height;
   while (i--)
-    {
-      if (!(line = f(info,&pos,info_size)))
+	{
+	  if (!(line = f(info,&pos,info_size)))
 	RETURN;
-      x = 0;
-      while (x<*width)
+	  x = 0;
+	  while (x<*width)
 	{
 	  col = 0;
 	  col_name = mlx_int_get_col_name(line+cpp*x,cpp);
 	  if (method)
-	    col = colors_direct[col_name];
+		col = colors_direct[col_name];
 	  else
-	    {
-	      j = nc;
-	      while (j--)
+		{
+		  j = nc;
+		  while (j--)
 		if (colors[j].name==col_name)
 		  {
-		    col = colors[j].col;
-		    j = 0;
+			col = colors[j].col;
+			j = 0;
 		  }
-	    }
+		}
 	  if (col==-1)
-	    col = 0xFF000000;
+		col = 0xFF000000;
 	  mlx_int_xpm_set_pixel(data, opp, col, x);
 	  x ++;
 	}
-      data += sl; //img->width*4;
-    }
+	  data += sl; //img->width*4;
+	}
   if (colors)
-    free(colors);
+	free(colors);
   if (colors_direct)
-    free(colors_direct);
+	free(colors_direct);
   return (img);
 }
 
@@ -344,15 +344,15 @@ void	mlx_int_file_get_rid_comment(char *ptr, int size)
   int	com_end;
 
   while ((com_begin = mlx_int_str_str_cote(ptr,"/*",size))!=-1)
-    {
-      com_end = mlx_int_str_str(ptr+com_begin+2,"*/",size-com_begin-2);
-      memset(ptr+com_begin,' ',com_end+4);
-    }
+	{
+	  com_end = mlx_int_str_str(ptr+com_begin+2,"*/",size-com_begin-2);
+	  memset(ptr+com_begin,' ',com_end+4);
+	}
   while ((com_begin = mlx_int_str_str_cote(ptr,"//",size))!=-1)
-    {
-      com_end = mlx_int_str_str(ptr+com_begin+2,"\n",size-com_begin-2);
-      memset(ptr+com_begin,' ',com_end+3);
-    }
+	{
+	  com_end = mlx_int_str_str(ptr+com_begin+2,"\n",size-com_begin-2);
+	  memset(ptr+com_begin,' ',com_end+3);
+	}
 }
 
 
@@ -364,13 +364,13 @@ void	*mlx_xpm_file_to_image(void *xvar,char *file,int *width,int *height)
   void	*img;
 
   if ((fd = open(file,O_RDONLY))==-1 || (size = lseek(fd,0,SEEK_END))==-1 ||
-      (ptr = mmap(0,size,PROT_WRITE|PROT_READ,MAP_PRIVATE,fd,0))==
-      (void *)MAP_FAILED)
-    {
-      if (fd>=0)
+	  (ptr = mmap(0,size,PROT_WRITE|PROT_READ,MAP_PRIVATE,fd,0))==
+	  (void *)MAP_FAILED)
+	{
+	  if (fd>=0)
 	close(fd);
-      return ((void *)0);
-    }
+	  return ((void *)0);
+	}
   mlx_int_file_get_rid_comment(ptr, size);
   img = mlx_int_parse_xpm(xvar,ptr,size,mlx_int_get_line, width, height);
   munmap(ptr,size);

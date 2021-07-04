@@ -8,19 +8,19 @@ import mlx_init
 
 
 func _mlx_bridge<T : AnyObject>(obj : T) -> UnsafeRawPointer {
-    return UnsafeRawPointer(Unmanaged.passUnretained(obj).toOpaque())
+	return UnsafeRawPointer(Unmanaged.passUnretained(obj).toOpaque())
 }
 
 func _mlx_bridge_retained<T : AnyObject>(obj : T) -> UnsafeRawPointer {
-    return UnsafeRawPointer(Unmanaged.passRetained(obj).toOpaque())
+	return UnsafeRawPointer(Unmanaged.passRetained(obj).toOpaque())
 }
 
 func _mlx_bridge<T : AnyObject>(ptr : UnsafeRawPointer) -> T {
-    return Unmanaged<T>.fromOpaque(ptr).takeUnretainedValue()
+	return Unmanaged<T>.fromOpaque(ptr).takeUnretainedValue()
 }
 
 func _mlx_bridge_transfer<T : AnyObject>(ptr : UnsafeRawPointer) -> T {
-    return Unmanaged<T>.fromOpaque(ptr).takeRetainedValue()
+	return Unmanaged<T>.fromOpaque(ptr).takeRetainedValue()
 }
 
 
@@ -46,7 +46,7 @@ public func mlx_loop_swift(_ mlxptr:UnsafeRawPointer)
 {
 	let mlx:MlxMain = _mlx_bridge(ptr:mlxptr)
 	mlx.inLoop = true
-        NSApp.run()
+		NSApp.run()
 }
 
 
@@ -75,27 +75,27 @@ public func mlx_key_hook_swift(_ winptr:UnsafeRawPointer, _ fctptr:UnsafeMutable
 @_cdecl("mlx_mouse_hook")
 public func mlx_mouse_hook_swift(_ winptr:UnsafeRawPointer, _ fctptr:UnsafeMutableRawPointer, _ paramptr:UnsafeMutableRawPointer) -> Int32
 {
-        let win:MlxWin = _mlx_bridge(ptr:winptr)
-        win.addHook(index: 4, fct: fctptr, param: paramptr)
-        return (Int32(0));
+		let win:MlxWin = _mlx_bridge(ptr:winptr)
+		win.addHook(index: 4, fct: fctptr, param: paramptr)
+		return (Int32(0));
 }
 
 
 @_cdecl("mlx_hook")
 public func mlx_hook_swift(_ winptr:UnsafeRawPointer, _ xevent:Int32, _ xmask:Int32, _ fctptr:UnsafeMutableRawPointer, _ paramptr:UnsafeMutableRawPointer) -> Int32
 {
-        let win:MlxWin = _mlx_bridge(ptr:winptr)
-        win.addHook(index: Int(xevent), fct: fctptr, param: paramptr)
-        return (Int32(0));
+		let win:MlxWin = _mlx_bridge(ptr:winptr)
+		win.addHook(index: Int(xevent), fct: fctptr, param: paramptr)
+		return (Int32(0));
 }
 
 
 @_cdecl("mlx_expose_hook")
 public func mlx_expose_hook_swift(_ winptr:UnsafeRawPointer, _ fctptr:UnsafeMutableRawPointer, _ paramptr:UnsafeMutableRawPointer) -> Int32
 {
-        let win:MlxWin = _mlx_bridge(ptr:winptr)
-        win.addHook(index: 12, fct: fctptr, param: paramptr)
-        return (Int32(0));
+		let win:MlxWin = _mlx_bridge(ptr:winptr)
+		win.addHook(index: 12, fct: fctptr, param: paramptr)
+		return (Int32(0));
 }
 
 @_cdecl("mlx_loop_hook")
@@ -103,7 +103,7 @@ public func mlx_loop_hook_swift(_ mlxptr:UnsafeRawPointer, _ fctptr:UnsafeMutabl
 {
 	let mlx:MlxMain = _mlx_bridge(ptr:mlxptr)
 	mlx.addLoopHook(fctptr, paramptr)
-        return (Int32(0));
+		return (Int32(0));
 }
 
 
@@ -142,7 +142,7 @@ public func mlx_pixel_put_swift(_ mlxptr:UnsafeRawPointer, _ winptr:UnsafeRawPoi
 @_cdecl("mlx_get_color_value")
 public func mlx_get_color_value(_ mlxptr:UnsafeRawPointer, _ color:UInt32) -> UInt32
 {
-    return color
+	return color
 }
 
 
@@ -197,18 +197,18 @@ public func mlx_do_sync_swift(_ mlxptr:UnsafeRawPointer) -> Int32
 @_cdecl("mlx_sync")
 public func mlx_sync_swift(_ what:Int32, _ param:UnsafeRawPointer) -> Int32
 {
-    switch what
-    {
+	switch what
+	{
 	case MLX_SYNC_IMAGE_WRITABLE:
 		let img:MlxImg = _mlx_bridge(ptr:param); while img.onGPU > 0 {} 
 	case MLX_SYNC_WIN_FLUSH_CMD:
 		let win:MlxWin = _mlx_bridge(ptr:param); win.flushImages()
 	case MLX_SYNC_WIN_CMD_COMPLETED:
-	        let win:MlxWin = _mlx_bridge(ptr:param); win.flushImages(); win.waitForGPU()
+			let win:MlxWin = _mlx_bridge(ptr:param); win.flushImages(); win.waitForGPU()
 	default:
 		break
-    }
-    return Int32(0)
+	}
+	return Int32(0)
 }
 
 @_cdecl("mlx_destroy_window")
