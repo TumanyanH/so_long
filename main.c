@@ -31,7 +31,7 @@ void calc_res()
 	}
 	g_val.screen_w = g_val.def_rect_size * g_val.map_w;
 	g_val.screen_h = g_val.def_rect_size * g_val.map_h;
-	g_val.allowed_def_rect_size = (g_val.def_rect_size / 10 >= 1) ? g_val.def_rect_size / 10 : 1;
+	// g_val.allowed_def_rect_size = (g_val.def_rect_size / 10 >= 1) ? g_val.def_rect_size / 10 : 1;
 }
 
 void draw_asset(int x, int y, char asset)
@@ -39,9 +39,6 @@ void draw_asset(int x, int y, char asset)
 	t_data img;
 	int tex_y = 0;
 	int tex_x = 0;
-	int allow_count = 0;
-	int super_y = 0;
-	// int super_x = 0;
 	
 	if (asset == 'p')
 		img = g_val.assets.p_data;
@@ -49,23 +46,18 @@ void draw_asset(int x, int y, char asset)
 		img = g_val.assets.e_data;
 	else if (asset == 'c')
 		img = g_val.assets.c_data;
+    else if (asset == 't')
+		img = g_val.assets.trap_data;
 
 	while (tex_y < g_val.def_rect_size)
 	{
-		tex_x = 0;
-		if (allow_count <= g_val.allowed_def_rect_size)
-		{
-			while (tex_x < g_val.def_rect_size)
-			{
-				put_pixel(&g_val.image, x + tex_x, y + super_y, get_pixel(&img, tex_x, tex_y));
-				++tex_x;
-			}
-			++super_y;
-		}
-		++allow_count;
-		if (allow_count == 5)
-			allow_count = 0;
-		++tex_y;
+        tex_x = 0;
+        while (tex_x < g_val.def_rect_size)
+        {
+            put_pixel(&g_val.image, x + tex_x, y + tex_y, get_pixel(&img, tex_x, tex_y));
+            ++tex_x;
+        }
+        ++tex_y;
 	}
 	
 }
@@ -74,6 +66,7 @@ void drawFrame()
 {
 	int x = 0;
 	int y = 0;
+    g_val.coll_count = 0;
 
 	while (y < g_val.map_h)
 	{
@@ -91,8 +84,12 @@ void drawFrame()
 				case 'E':
 					draw_asset(g_val.def_rect_size * x, g_val.def_rect_size * y, 'e');
 					break;
+                case 'T':
+					draw_asset(g_val.def_rect_size * x, g_val.def_rect_size * y, 't');
+					break;
 				case 'C':
 					draw_asset(g_val.def_rect_size * x, g_val.def_rect_size * y, 'c');
+                    ++g_val.coll_count;
 					break;
 				default:
 					break;
@@ -129,6 +126,27 @@ int kill_prog()
 	return (0);
 }
 
+void check_cell()
+{
+    int i = 100000000;
+    if (g_val.map[g_val.p_pos.y][g_val.p_pos.x] == 'C')
+    {
+        g_val.map[g_val.p_pos.y][g_val.p_pos.x] = '0';
+    }
+    if (g_val.map[g_val.p_pos.y][g_val.p_pos.x] == 'T')
+    {
+        ft_putchar("Failure");
+        exit(0);
+    }
+    if (g_val.map[g_val.p_pos.y][g_val.p_pos.x] == 'E' && g_val.coll_count == 0)
+    {
+        while (i > 0)
+            --i;
+        ft_putchar("Win");
+        exit(0);
+    }
+}
+
 int key_press_hook(int keycode)
 {
    switch (keycode)
@@ -136,26 +154,29 @@ int key_press_hook(int keycode)
 		case 13: //w
 			if (g_val.map[g_val.p_pos.y - 1][g_val.p_pos.x] != '1')
 				--g_val.p_pos.y;
+            ++g_val.step_count;
 			break;
 		case 0: //a
 			if (g_val.map[g_val.p_pos.y][g_val.p_pos.x - 1] != '1')
 				--g_val.p_pos.x;
+            ++g_val.step_count;
 			break;
 		case 1: //s
 			if (g_val.map[g_val.p_pos.y + 1][g_val.p_pos.x] != '1')
 				++g_val.p_pos.y;
+            ++g_val.step_count;
 			break;
 		case 2: //d
 			if (g_val.map[g_val.p_pos.y][g_val.p_pos.x + 1] != '1')
 				++g_val.p_pos.x;
+            ++g_val.step_count;
 			break;
 		case 53:
 			kill_prog();
 		default:
 			break;
    }
-   clear_window();
-   drawFrame();
+   check_cell();
    return (0);
 }
 

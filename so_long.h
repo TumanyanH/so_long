@@ -11,6 +11,7 @@
 # define IS_ALLOWED_MEMBER(c) (c == 'P' \
                             || c == 'E' \
                             || c == 'C' \
+                            || c == 'T' \
                             || c == '0' \
                             || c == '1')
 
@@ -22,6 +23,12 @@ typedef struct s_coords
     int y;
 } t_coords;
 
+typedef struct s_parser
+{
+    int collect;
+    int exit;
+    int player;
+} t_parser;
 
 typedef	struct		s_data
 {
@@ -43,6 +50,9 @@ typedef struct      s_asset_paths
     char            *collectable;
     void            *c_img;
     t_data          c_data;
+    char            *trap;
+    void            *trap_img;
+    t_data          trap_data;
 }                   t_asset_paths;
 
 struct s_values
@@ -54,11 +64,13 @@ struct s_values
     int map_h;
     char **map;
     int def_rect_size;
-    int allowed_def_rect_size;
+    int coll_count;
+    int step_count;
     int screen_w;
     int screen_h;
     t_coords p_pos;
     t_asset_paths assets;
+    t_parser parser;
 } g_val;
 
 int             parse_map(char *map_url);

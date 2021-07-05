@@ -65,6 +65,12 @@ static void fill_matrix(char *map_url)
 		g_val.map[y] = malloc(g_val.map_w * (sizeof(char) + 1));
 		g_val.p_pos.x = (find_char(line, 'P') >= 0) ? find_char(line, 'P') : g_val.p_pos.x;
 		g_val.p_pos.y = (find_char(line, 'P') >= 0) ? y : g_val.p_pos.y;
+		if (find_char(line, 'C') > -1)
+			g_val.parser.collect = 1;
+		if (find_char(line, 'E') > -1)
+			g_val.parser.exit = 1;
+		if (find_char(line, 'P') > -1)
+			g_val.parser.player = 1;
 		line = ft_strreplace(line, 'P', '0');
 		ft_strlcpy(g_val.map[y], line, (ft_strlen(line) + 1));
 		++y;
@@ -85,9 +91,7 @@ static int check_map()
 			while (x < g_val.map_w)
 			{
 				if (g_val.map[y][x] != '1')
-				{
-					ft_error("MAP -a Invalid wall construction");
-				}
+					ft_error("MAP - Invalid wall construction");
 				++x;
 			}
 		}
@@ -105,5 +109,7 @@ int parse_map(char *map_url)
 	sizes_calc(map_url);
 	fill_matrix(map_url);
 	check_map();
+	if (!g_val.parser.collect || !g_val.parser.exit || !g_val.parser.player)
+		ft_error("MAP - An important part of your map does not exists");
 	return (0);
 }
